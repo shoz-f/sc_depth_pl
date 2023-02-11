@@ -14,12 +14,10 @@ DATA_ROOT=/media/bjw/disk1/depth_data
 # CKPT=ckpts/nyu_scv2/epoch=101-val_loss=0.1580.ckpt
 
 INPUT=$DATA_ROOT/ddad/testing/color
-OUTPUT=results/ddad
+OUTPUT=onnx_model
 CONFIG=configs/v3/ddad.txt
 CKPT=ckpts/ddad_scv3/epoch=99-val_loss=0.1438.ckpt
 
 # run
 export CUDA_VISIBLE_DEVICES=0
-python export_onnx.py --config $CONFIG \
---input_dir $INPUT --output_dir $OUTPUT \
---ckpt_path $CKPT
+python export_onnx.py --config $CONFIG --output_dir $OUTPUT --ckpt_path $CKPT

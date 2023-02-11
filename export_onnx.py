@@ -21,6 +21,11 @@ def main():
     elif hparams.model_version == 'v3':
         system = SC_DepthV3(hparams)
 
+    output_dir = Path(hparams.output_dir)
+    output_dir.makedirs_p()
+    
+    onnx_file = output_dir / Path(ckpt).stem + ".onnx"
+
     system = system.load_from_checkpoint(hparams.ckpt_path, strict=False)
 
     model = system.depth_net
@@ -33,18 +38,14 @@ def main():
     # export the model
     torch.onnx.export(model,
         dummy_input,
-        "sc_depth.onnx",
+        output_dir / Path(ckpt).stem + ".onnx",
         export_params=True,
         #opset_version=10,
         do_constant_folding=True,
-        #input_names=[],
-        #output_names=[],
+        input_names=["input.0"],
+        output_names=["output.0"],
         #dynamic_axes={}
         )
-
-#    output_dir = Path(hparams.output_dir) / \
-#        'model_{}'.format(hparams.model_version)
-#    output_dir.makedirs_p()
 
 
 if __name__ == '__main__':
