@@ -1,6 +1,6 @@
 import torch
 import torch.onnx
-#from path import Path
+from path import Path
 import os
 
 from config import get_opts, get_training_size
@@ -23,8 +23,6 @@ def main():
 
     output_dir = Path(hparams.output_dir)
     output_dir.makedirs_p()
-    
-    onnx_file = output_dir / Path(ckpt).stem + ".onnx"
 
     system = system.load_from_checkpoint(hparams.ckpt_path, strict=False)
 
@@ -38,7 +36,7 @@ def main():
     # export the model
     torch.onnx.export(model,
         dummy_input,
-        output_dir / Path(ckpt).stem + ".onnx",
+        output_dir / Path(hparams.ckpt_path).stem + ".onnx",
         export_params=True,
         #opset_version=10,
         do_constant_folding=True,
